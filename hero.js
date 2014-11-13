@@ -177,10 +177,30 @@ var moves = {
   coward : function(gameData, helpers) {
     return helpers.findNearestHealthWell(gameData);
   }
+
  };
 
+var stian = function(gameData, helpers) {
+  var hero = gameData.activeHero;
+  var board = gameData.board;
+  var stats = helpers.generateStats(gameData);
+  var healingTarget = helpers.findNearestObjectDirectionAndDistance(board, hero, function(heroTile) {
+    return heroTile.type === 'Hero' && heroTile.team === hero.team && heroTile.health <= 75;
+  });
+
+  if (stats.ownedDiamondMines <= 1) {
+    return moves.safeDiamondMiner(gameData, helpers);
+  }
+  else if (healingTarget !== false && healingTarget.distance <= 4) {
+    return moves.priest(gamaData, helpers);
+  }
+  else {
+    return moves.carefulAssassin(gameData, helpers);
+  }
+};
+
 //  Set our heros strategy
-var  move =  moves.aggressor;
+var move = stian;
 
 // Export the move function here
 module.exports = move;

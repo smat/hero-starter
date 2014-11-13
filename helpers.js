@@ -141,6 +141,26 @@ helpers.findNearestObjectDirectionAndDistance = function(board, fromTile, tileCa
   return false;
 };
 
+helpers.generateStats = function(gameData) {
+  var hero = gameData.activeHero;
+  var board = gameData.board;
+  var result = {
+    ownedDiamondMines : 0
+  };
+  var x, y;
+  for(x = 0; x < board.lengthOfSide - 1; x++) {
+    for(y = 0; y < board.lengthOfSide - 1; y++) {
+      var tile = board.tiles[x][y];
+      if (tile.type === 'DiamondMine') {
+        if (tile.owner && tile.owner.id === hero.id) {
+          result.ownedDiamondMines++;
+        }
+      }
+    }
+  }
+  return result;
+};
+
 // Returns the direction of the nearest non-team diamond mine or false, if there are no diamond mines
 helpers.findNearestNonTeamDiamondMine = function(gameData) {
   var hero = gameData.activeHero;
